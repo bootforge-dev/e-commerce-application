@@ -58,6 +58,7 @@ public class OrderService {
                 .id(order.getId())
                 .productId(order.getProductId())
                 .quantity(order.getQuantity())
+                .price(order.getPrice())
                 .totalAmount(order.getTotalAmount())
                 .status(order.getStatus())
                 .createdAt(order.getCreatedAt())

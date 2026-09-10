@@ -1,0 +1,64 @@
+
+# Get all products
+GET http://localhost:9001/api/v1/products
+
+###
+# Get product by id
+GET http://localhost:9001/api/v1/products/1
+
+###
+# create product
+POST http://localhost:9001/api/v1/products
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "AirPods Pro",
+  "description": "Wireless earbuds",
+  "price": 24999.00,
+  "quantity": 200
+}
+
+###
+# Create new inventory
+POST http://localhost:9002/api/v1/inventories
+Content-Type: application/json
+Accept:  application/json
+
+{
+  "productId": 3,
+  "quantity": 200
+}
+
+###
+# Get Inventory by product id
+GET http://localhost:9002/api/v1/inventories/1
+
+###
+# Check availability
+GET http://localhost:9002/api/v1/inventories/1/availability?quantity=5
+
+
+###
+# Independent Reserve
+POST http://localhost:9002/api/v1/inventories/1/reserve?quantity=5
+
+###
+# Independent Release
+POST http://localhost:9002/api/v1/inventories/1/release?quantity=5
+
+###
+# Independent Confirm
+POST http://localhost:9002/api/v1/inventories/1/confirm?quantity=5
+
+
+###
+# Create Order
+POST http://localhost:9003/api/v1/orders
+Content-Type: application/json
+Accept: application/json
+
+{
+  "productId": 1,
+  "quantity": 0
+}
