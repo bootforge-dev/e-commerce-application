@@ -64,6 +64,21 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
+    @ExceptionHandler(InsufficientInventoryException.class)
+    public ResponseEntity<ErrorResponse> handleInsufficientInventoryException(
+            InsufficientInventoryException ex,
+            HttpServletRequest request) {
+        ErrorResponse response = new ErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                "Insufficient inventory",
+                request.getRequestURI()
+        );
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(
             Exception ex,

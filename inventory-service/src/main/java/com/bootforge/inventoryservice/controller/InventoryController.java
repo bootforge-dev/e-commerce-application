@@ -42,5 +42,15 @@ public class InventoryController {
                 .ok(inventoryService.checkInventoryAvailability(productId, quantity));
     }
 
+    @PostMapping("/{productId}/reserve")
+    public ResponseEntity<InventoryResponse> reserveInventory(
+            @PathVariable @Positive Long productId,
+            @RequestParam @NotNull @Positive Integer quantity) {
+
+        return ResponseEntity.ok(
+                inventoryService.reserveInventory(productId, quantity)
+        );
+    }
+
 
 }

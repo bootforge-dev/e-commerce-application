@@ -4,6 +4,7 @@ import com.bootforge.inventoryservice.dto.CreateInventoryRequest;
 import com.bootforge.inventoryservice.dto.InventoryAvailabilityResponse;
 import com.bootforge.inventoryservice.dto.InventoryResponse;
 import com.bootforge.inventoryservice.entity.Inventory;
+import com.bootforge.inventoryservice.exception.InsufficientInventoryException;
 import com.bootforge.inventoryservice.exception.ProductAlreadyExistsException;
 import com.bootforge.inventoryservice.exception.ProductNotFoundException;
 import com.bootforge.inventoryservice.repository.InventoryRepository;
@@ -60,5 +61,19 @@ public class InventoryService {
                 .requestedQuantity(quantity)
                 .available(availableQuantity >= quantity)
                 .build();
+    }
+
+    public InventoryResponse reserveInventory(Long productId, Integer quantity) {
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(
+                () -> new ProductNotFoundException("Product not found with the productId: " + productId)
+        );
+        int availableQuantity = inventory.getQuantity() - inventory.getReservedQuantity();
+        if (availableQuantity < quantity) {
+            throw new InsufficientInventoryException("Insufficient inventory for productId: " + productId);
+        }
+        inventory.setReservedQuantity(
+                inventory.getReservedQuantity() + quantity);
+        Inventory savedInventory = inventoryRepository.save(inventory);
+        return toResponse(savedInventory);
     }
 }
