@@ -1,4 +1,4 @@
-package com.bootforge.productservice.dto;
+package com.bootforge.inventoryservice.productservice.dto;
 
 import lombok.Builder;
 

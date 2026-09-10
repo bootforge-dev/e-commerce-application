@@ -1,11 +1,11 @@
-package com.bootforge.productservice.service;
+package com.bootforge.inventoryservice.productservice.service;
 
-import com.bootforge.productservice.dto.CreateProductRequest;
-import com.bootforge.productservice.dto.ProductResponse;
-import com.bootforge.productservice.dto.UpdateProductRequest;
-import com.bootforge.productservice.entity.Product;
-import com.bootforge.productservice.exception.ProductNotFoundException;
-import com.bootforge.productservice.repository.ProductRepository;
+import com.bootforge.inventoryservice.productservice.dto.CreateProductRequest;
+import com.bootforge.inventoryservice.productservice.dto.ProductResponse;
+import com.bootforge.inventoryservice.productservice.dto.UpdateProductRequest;
+import com.bootforge.inventoryservice.productservice.entity.Product;
+import com.bootforge.inventoryservice.productservice.exception.ProductNotFoundException;
+import com.bootforge.inventoryservice.productservice.repository.ProductRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

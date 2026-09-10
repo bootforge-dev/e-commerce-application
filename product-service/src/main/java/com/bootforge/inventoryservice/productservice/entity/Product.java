@@ -1,4 +1,4 @@
-package com.bootforge.productservice.entity;
+package com.bootforge.inventoryservice.productservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

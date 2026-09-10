@@ -1,4 +1,4 @@
-package com.bootforge.productservice.exception;
+package com.bootforge.inventoryservice.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

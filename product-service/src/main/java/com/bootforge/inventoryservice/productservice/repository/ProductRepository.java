@@ -1,6 +1,6 @@
-package com.bootforge.productservice.repository;
+package com.bootforge.inventoryservice.productservice.repository;
 
-import com.bootforge.productservice.entity.Product;
+import com.bootforge.inventoryservice.productservice.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {

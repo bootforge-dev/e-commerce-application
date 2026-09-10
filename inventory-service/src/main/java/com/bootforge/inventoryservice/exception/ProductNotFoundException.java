@@ -1,4 +1,4 @@
-package com.bootforge.productservice.exception;
+package com.bootforge.inventoryservice.exception;
 
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(String message) {
