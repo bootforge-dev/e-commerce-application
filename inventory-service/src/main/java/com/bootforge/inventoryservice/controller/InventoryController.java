@@ -52,5 +52,25 @@ public class InventoryController {
         );
     }
 
+    @PostMapping("/{productId}/release")
+    public ResponseEntity<InventoryResponse> releaseInventory(
+            @PathVariable @Positive Long productId,
+            @RequestParam @NotNull @Positive Integer quantity) {
+
+        return ResponseEntity.ok(
+                inventoryService.releaseInventory(productId, quantity)
+        );
+    }
+
+    @PostMapping("/{productId}/confirm")
+    public ResponseEntity<InventoryResponse> confirmInventory(
+            @PathVariable @Positive Long productId,
+            @RequestParam @NotNull @Positive Integer quantity) {
+
+        return ResponseEntity.ok(
+                inventoryService.confirmInventory(productId, quantity)
+        );
+    }
+
 
 }

@@ -8,8 +8,11 @@ import com.bootforge.inventoryservice.exception.InsufficientInventoryException;
 import com.bootforge.inventoryservice.exception.ProductAlreadyExistsException;
 import com.bootforge.inventoryservice.exception.ProductNotFoundException;
 import com.bootforge.inventoryservice.repository.InventoryRepository;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,17 +66,70 @@ public class InventoryService {
                 .build();
     }
 
+    @Transactional
     public InventoryResponse reserveInventory(Long productId, Integer quantity) {
         Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(
                 () -> new ProductNotFoundException("Product not found with the productId: " + productId)
         );
+
         int availableQuantity = inventory.getQuantity() - inventory.getReservedQuantity();
+
         if (availableQuantity < quantity) {
             throw new InsufficientInventoryException("Insufficient inventory for productId: " + productId);
         }
+
         inventory.setReservedQuantity(
                 inventory.getReservedQuantity() + quantity);
+
         Inventory savedInventory = inventoryRepository.save(inventory);
+        return toResponse(savedInventory);
+    }
+
+    @Transactional
+    public InventoryResponse releaseInventory(Long productId, Integer quantity) {
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(
+                () -> new ProductNotFoundException("Product not found with the productId: " + productId)
+        );
+
+        if (inventory.getReservedQuantity() < quantity) {
+            throw new InsufficientInventoryException(
+                    "Cannot release " + quantity +
+                            " units. Reserved quantity is only " +
+                            inventory.getReservedQuantity());
+        }
+
+        inventory.setReservedQuantity(
+                inventory.getReservedQuantity() - quantity
+        );
+
+        Inventory savedInventory = inventoryRepository.save(inventory);
+
+        return toResponse(savedInventory);
+    }
+
+    @Transactional
+    public InventoryResponse confirmInventory(Long productId, Integer quantity) {
+        Inventory inventory = inventoryRepository.findByProductId(productId).orElseThrow(
+                () -> new ProductNotFoundException("Product not found with the productId: " + productId)
+        );
+
+        if (inventory.getReservedQuantity() < quantity) {
+            throw new InsufficientInventoryException(
+                    "Cannot confirm " + quantity +
+                            " units. Reserved quantity is only " +
+                            inventory.getReservedQuantity());
+        }
+
+        inventory.setReservedQuantity(
+                inventory.getReservedQuantity() - quantity
+        );
+
+        inventory.setQuantity(
+                inventory.getQuantity() - quantity
+        );
+
+        Inventory savedInventory = inventoryRepository.save(inventory);
+
         return toResponse(savedInventory);
     }
 }
