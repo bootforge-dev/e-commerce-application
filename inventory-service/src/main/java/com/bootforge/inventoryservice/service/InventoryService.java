@@ -8,8 +8,6 @@ import com.bootforge.inventoryservice.exception.InsufficientInventoryException;
 import com.bootforge.inventoryservice.exception.ProductAlreadyExistsException;
 import com.bootforge.inventoryservice.exception.ProductNotFoundException;
 import com.bootforge.inventoryservice.repository.InventoryRepository;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

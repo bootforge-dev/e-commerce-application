@@ -8,6 +8,7 @@
     <modules>
         <module>product-service</module>
         <module>inventory-service</module>
+        <module>order-servcie</module>
     </modules>
 
     <parent>
