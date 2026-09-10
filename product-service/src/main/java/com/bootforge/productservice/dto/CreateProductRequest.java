@@ -1,4 +1,4 @@
-package com.bootforge.inventoryservice.productservice.dto;
+package com.bootforge.productservice.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +8,8 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record UpdateProductRequest(
+public record CreateProductRequest(
+
         @NotBlank(message = "Name is mandatory")
         String name,
 

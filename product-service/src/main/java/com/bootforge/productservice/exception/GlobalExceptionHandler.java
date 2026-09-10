@@ -1,4 +1,4 @@
-package com.bootforge.inventoryservice.productservice.exception;
+package com.bootforge.productservice.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
