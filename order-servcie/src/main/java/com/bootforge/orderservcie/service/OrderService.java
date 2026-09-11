@@ -7,6 +7,8 @@ import com.bootforge.orderservcie.dto.OrderResponse;
 import com.bootforge.orderservcie.dto.ProductResponse;
 import com.bootforge.orderservcie.entity.Order;
 import com.bootforge.orderservcie.entity.OrderStatus;
+import com.bootforge.orderservcie.event.OrderCreatedEvent;
+import com.bootforge.orderservcie.producer.OrderEventProducer;
 import com.bootforge.orderservcie.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ public class OrderService {
     private final ProductClient productClient;
     private final InventoryClient inventoryClient;
     private final OrderRepository orderRepository;
+    private final OrderEventProducer orderEventProducer;
 
     @Transactional
     public OrderResponse createOrder(CreateOrderRequest request) {
@@ -49,6 +52,14 @@ public class OrderService {
                 .build();
 
         Order savedOrder = orderRepository.save(order);
+
+        OrderCreatedEvent event = OrderCreatedEvent.builder()
+                .orderId(savedOrder.getId())
+                .productId(savedOrder.getProductId())
+                .quantity(savedOrder.getQuantity())
+                .amount(savedOrder.getTotalAmount())
+                .build();
+        orderEventProducer.publishOrderCreated(event);
 
         return this.toResponse(savedOrder);
     }
