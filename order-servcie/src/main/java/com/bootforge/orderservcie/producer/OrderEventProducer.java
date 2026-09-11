@@ -13,25 +13,12 @@ public class OrderEventProducer {
     private final KafkaTemplate<String, OrderCreatedEvent> kafkaTemplate;
 
     public void publishOrderCreated(OrderCreatedEvent event) {
+
         kafkaTemplate.send(
                 ORDER_CREATED_TOPIC,
                 event.orderId().toString(),
                 event
-        ).whenComplete((result, ex) ->{
-            if(ex != null){
-                System.err.println("Kafka publish failed:");
-                ex.printStackTrace();
-                return;
-            }
-            System.out.println(
-                    "Kafka publish SUCCESS: topic=" +
-                            result.getRecordMetadata().topic() +
-                            ", partition=" +
-                            result.getRecordMetadata().partition() +
-                            ", offset=" +
-                            result.getRecordMetadata().offset()
-            );
-        });
+        );
     }
 
 }
