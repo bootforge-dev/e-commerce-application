@@ -3,7 +3,9 @@ package com.bootforge.paymentservice.service;
 import com.bootforge.paymentservice.dto.CreatePaymentRequest;
 import com.bootforge.paymentservice.dto.PaymentResponse;
 import com.bootforge.paymentservice.entity.Payment;
+import com.bootforge.paymentservice.entity.PaymentMethod;
 import com.bootforge.paymentservice.entity.PaymentStatus;
+import com.bootforge.paymentservice.event.OrderCreatedEvent;
 import com.bootforge.paymentservice.exceptin.PaymentAlreadyExistsException;
 import com.bootforge.paymentservice.exceptin.PaymentNotFoundException;
 import com.bootforge.paymentservice.repository.PaymentRepository;
@@ -50,12 +52,12 @@ public class PaymentService {
 
         boolean paymentSuccessful = true;
 
-        if(paymentSuccessful){
+        if (paymentSuccessful) {
             payment.setStatus(PaymentStatus.SUCCESS);
             payment.setTransactionId(
-                    "TXN-"+ UUID.randomUUID()
+                    "TXN-" + UUID.randomUUID()
             );
-        }else{
+        } else {
             payment.setStatus(PaymentStatus.FAILED);
         }
 
@@ -64,14 +66,31 @@ public class PaymentService {
         return toResponse(savedPayment);
     }
 
-    public PaymentResponse getPaymentById(Long paymentId){
+    @Transactional
+    public PaymentResponse createPaymentFromOrder(OrderCreatedEvent event) {
+        PaymentResponse payment;
+        if (paymentRepository.existsByOrderId(event.orderId())) {
+            payment = getPaymentByOrderId(event.orderId());
+        } else {
+            CreatePaymentRequest request = new CreatePaymentRequest(
+                    event.orderId(),
+                    event.amount(),
+                    PaymentMethod.UPI
+            );
+            payment = createPayment(request);
+        }
+
+        return processPayment(payment.id());
+    }
+
+    public PaymentResponse getPaymentById(Long paymentId) {
         Payment payment = paymentRepository.findById(paymentId).orElseThrow(
                 () -> new PaymentNotFoundException("Payment not found with id: " + paymentId)
         );
         return toResponse(payment);
     }
 
-    public PaymentResponse getPaymentByOrderId(Long orderId){
+    public PaymentResponse getPaymentByOrderId(Long orderId) {
         Payment payment = paymentRepository.findByOrderId(orderId).orElseThrow(
                 () -> new PaymentNotFoundException("Payment not found with order id: " + orderId)
         );
