@@ -26,7 +26,7 @@ Content-Type: application/json
 Accept:  application/json
 
 {
-  "productId": 3,
+  "productId": 1,
   "quantity": 200
 }
 
@@ -60,5 +60,22 @@ Accept: application/json
 
 {
   "productId": 1,
-  "quantity": 0
+  "quantity": 10
 }
+
+###
+# ===============================PAYMENT API TESTING============================
+# Create Payment
+POST http://localhost:9004/api/v1/payments
+Content-Type: application/json
+Accept: application/json
+
+{
+  "orderId": 1,
+  "amount": 159998.00,
+  "paymentMethod": "CARD"
+}
+
+###
+# Process payment
+POST http://localhost:9004/api/v1/payments/1/process

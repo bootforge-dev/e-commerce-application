@@ -9,6 +9,7 @@
         <module>product-service</module>
         <module>inventory-service</module>
         <module>order-servcie</module>
+        <module>payment-service</module>
     </modules>
 
     <parent>
